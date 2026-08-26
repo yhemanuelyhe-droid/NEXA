@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>NEXA</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- PANTALLA DE INICIO -->
+  <div class="splash-screen" id="splash">
+
+    <div class="logo">
+      N
+    </div>
+
+    <h1>NEXA</h1>
+
+    <p>Tu asistente inteligente</p>
+
+  </div>
+
+
+  <!-- APLICACIÓN -->
+  <main class="main-ui hidden" id="main">
+
+    <header>
+
+      <h1>NEXA</h1>
+
+      <p>¿En qué puedo ayudarte?</p>
+
+    </header>
+
+
+    <!-- OPCIONES -->
+    <section class="options">
+
+      <div class="card" onclick="generarImagen()">
+        <span>🖼️</span>
+        <h3>Crear una imagen</h3>
+        <p>Genera imágenes con IA</p>
+      </div>
+
+
+      <div class="card" onclick="darConsejo()">
+        <span>💡</span>
+        <h3>Dar consejos</h3>
+        <p>Obtén recomendaciones</p>
+      </div>
+
+
+      <div class="card" onclick="resumirTexto()">
+        <span>📝</span>
+        <h3>Resumir textos</h3>
+        <p>Resume tus documentos</p>
+      </div>
+
+    </section>
+
+
+    <!-- CHAT -->
+    <section class="chat-section">
+
+      <div id="chat-history">
+
+        <div class="welcome-message">
+
+          <div class="bot-icon">
+            N
+          </div>
+
+          <div>
+            <strong>NEXA</strong>
+
+            <p>
+              Hola, soy NEXA. ¿Qué necesitas?
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ESCRIBIR -->
+      <div class="input-area">
+
+        <input
+          type="text"
+          id="user-input"
+          placeholder="Escribe tu pregunta..."
+          autocomplete="off"
+        >
+
+        <button
+          class="send-button"
+          onclick="sendMessage()"
+        >
+          ➤
+        </button>
+
+      </div>
+
+
+      <!-- BOTONES -->
+      <div class="chat-buttons">
+
+        <button onclick="startVoiceInput()">
+          🎤 Hablar
+        </button>
+
+        <button onclick="mostrarHistorial()">
+          📜 Historial
+        </button>
+
+        <button onclick="limpiarChat()">
+          🗑️ Limpiar
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- BIBLIOTECA -->
+    <section class="library">
+
+      <h2>Biblioteca de imágenes</h2>
+
+      <div id="image-gallery">
+        <p class="empty">
+          Tus imágenes aparecerán aquí.
+        </p>
+      </div>
+
+
+      <h2>Biblioteca de textos</h2>
+
+      <div id="text-gallery">
+        <p class="empty">
+          Tus textos aparecerán aquí.
+        </p>
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script src="script.js"></script>
+
+</body>
+</html>
