@@ -41,6 +41,8 @@ window.addEventListener("load", () => {
 // CHAT CON GROQ
 // ==========================================
 
+const PREFIJO_IMAGEN = "quiero crear una imagen de";
+
 async function sendMessage() {
 
   const input =
@@ -56,6 +58,10 @@ async function sendMessage() {
   if (!message) {
     return;
   }
+
+
+  const esImagen =
+    message.toLowerCase().startsWith(PREFIJO_IMAGEN);
 
 
   // Mostrar mensaje del usuario
@@ -77,7 +83,7 @@ async function sendMessage() {
   input.value = "";
 
 
-  // Mostrar cargando
+  // Burbuja de respuesta (vacía por ahora)
 
   const aiMessage =
     document.createElement("div");
@@ -85,14 +91,37 @@ async function sendMessage() {
   aiMessage.className =
     "ai-message";
 
-  aiMessage.textContent =
-    "🤖 NEXA está pensando...";
-
   chat.appendChild(aiMessage);
-
 
   chat.scrollTop =
     chat.scrollHeight;
+
+
+  // ======================================
+  // PEDIDO DE IMAGEN
+  // ======================================
+
+  if (esImagen) {
+
+    const descripcion =
+      message.slice(PREFIJO_IMAGEN.length).trim();
+
+    if (!descripcion) {
+      aiMessage.textContent =
+        'Cuéntame qué imagen quieres, por ejemplo: "quiero crear una imagen de un gato astronauta".';
+      return;
+    }
+
+    generarImagenIA(aiMessage, descripcion);
+    return;
+
+  }
+
+
+  // Mostrar cargando
+
+  aiMessage.textContent =
+    "🤖 NEXA está pensando...";
 
 
   try {
@@ -134,7 +163,7 @@ async function sendMessage() {
 
 
     // ======================================
-    // MOSTRAR RESPUESTA
+    // MOSTRAR RESPUESTA (con formato)
     // ======================================
 
     if (!data.respuesta) {
@@ -146,8 +175,10 @@ async function sendMessage() {
     }
 
 
-    aiMessage.textContent =
-      "🤖 " + data.respuesta;
+    mostrarRespuestaFormateada(
+      aiMessage,
+      data.respuesta
+    );
 
 
   } catch (error) {
@@ -165,6 +196,83 @@ async function sendMessage() {
 
   chat.scrollTop =
     chat.scrollHeight;
+
+}
+
+
+// ==========================================
+// FORMATO DE TEXTO (negritas, títulos, tablas)
+// ==========================================
+
+function mostrarRespuestaFormateada(elemento, texto) {
+
+  if (window.marked && window.DOMPurify) {
+
+    const html =
+      DOMPurify.sanitize(marked.parse(texto));
+
+    elemento.innerHTML =
+      '<span class="emoji-nexa">🤖</span> ' + html;
+
+  } else {
+
+    // Si las librerías no cargaron, mostrar texto plano
+    elemento.textContent =
+      "🤖 " + texto;
+
+  }
+
+}
+
+
+// ==========================================
+// CREAR IMAGEN CON IA (Pollinations, sin API key)
+// ==========================================
+
+function generarImagenIA(elemento, descripcion) {
+
+  elemento.textContent =
+    "🎨 Generando tu imagen, esto puede tardar unos segundos...";
+
+  const semilla =
+    Math.floor(Math.random() * 999999999);
+
+  const url =
+    "https://image.pollinations.ai/prompt/" +
+    encodeURIComponent(descripcion) +
+    "?width=1024&height=1024&nologo=true&seed=" +
+    semilla;
+
+  const img =
+    document.createElement("img");
+
+  img.className =
+    "imagen-generada";
+
+  img.alt =
+    descripcion;
+
+  img.onload = () => {
+
+    elemento.textContent = "";
+    elemento.appendChild(img);
+
+    const chat =
+      document.getElementById("chat-history");
+
+    chat.scrollTop =
+      chat.scrollHeight;
+
+  };
+
+  img.onerror = () => {
+
+    elemento.textContent =
+      "⚠️ No pude generar la imagen. Intenta de nuevo con otra descripción.";
+
+  };
+
+  img.src = url;
 
 }
 
