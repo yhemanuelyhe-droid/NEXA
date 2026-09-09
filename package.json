@@ -4,5 +4,8 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "groq-sdk": "^1.5.0"
+  },
+  "scripts": {
+    "start": "node server.js"
   }
 }
